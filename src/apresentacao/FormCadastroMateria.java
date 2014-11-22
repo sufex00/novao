@@ -426,10 +426,9 @@ public class FormCadastroMateria extends javax.swing.JInternalFrame {
         for(Materia obj_materia : list_Materia)
         {
             Turma objTurma = (Turma) obj_BdMateria.procurar(new Turma(obj_materia.getIdTurma()));
-            System.out.println(obj_materia.getIdTurma());
-                Model.addRow(new Object[] {obj_materia.getId(), 
-                    obj_materia.getNome(), obj_materia.getCargahoraria(), obj_materia.getDescricao(), objTurma.getNome()}
-                    );
+            Model.addRow(new Object[] {obj_materia.getId(), 
+                obj_materia.getNome(), obj_materia.getCargahoraria(), obj_materia.getDescricao(), objTurma.getNome()}
+                );
         }
         jTableMateria.setModel(Model);
                 

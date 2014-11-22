@@ -408,10 +408,9 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
             FactoryBd = new FactoryBdTurma();
             obj_BdProfessor = FactoryBd.criar_DAO_BD();
             Turma objTurma = (Turma) obj_BdProfessor.procurar(new Turma(objMateria.getIdTurma()));
-            System.out.print(objMateria.getNome().length());
-                Model.addRow(new Object[] {obj_Professor.getCpf(), 
-                    obj_Professor.getNome(), obj_Professor.getEmail(), objTurma.getNome(), objMateria.getNome()}
-                    );
+            Model.addRow(new Object[] {obj_Professor.getCpf(), 
+                obj_Professor.getNome(), obj_Professor.getEmail(), objTurma.getNome(), objMateria.getNome()}
+                );
         }
         jTableProfessores.setModel(Model);
                 

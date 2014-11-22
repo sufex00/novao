@@ -18,14 +18,23 @@ public class ConexaoPrototype implements PrototypeInterface{
     
     Connection conexao;
     String nomeBanco ;
-    public ConexaoPrototype clone()
+
+    public ConexaoPrototype() {
+        nomeBanco="";
+    }
+    
+    protected ConexaoPrototype(ConexaoPrototype conexao)
     {
-        return new ConexaoPrototype();
+        this.nomeBanco = conexao.getNomeBanco();
     }
     
     public void setNomeBanco(String nome)
     {
         nomeBanco = nome;
+    }
+
+    public String getNomeBanco() {
+        return nomeBanco;
     }
     
     public Connection getConnection() {
@@ -49,8 +58,14 @@ public class ConexaoPrototype implements PrototypeInterface{
         }
         return conexao;
     }
+    
     public void close() throws SQLException
     {
         conexao.close();
+    }
+    
+    public ConexaoPrototype clone()
+    {
+        return new ConexaoPrototype(this);
     }
 }

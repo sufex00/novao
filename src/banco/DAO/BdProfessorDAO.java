@@ -5,8 +5,8 @@
  */
 package banco.DAO;
 
-import banco.Conexao;
 import banco.DAO.InterfaceDAO;
+import banco.Prototype.ConexaoPrototype;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +19,17 @@ import objeto.*;
  */
 public class BdProfessorDAO implements InterfaceDAO<Professor>{
 
+    ConexaoPrototype conexao;
+    
+    public BdProfessorDAO()
+    {
+            conexao = new ConexaoPrototype();
+            conexao.setNomeBanco("gerenciador");
+    }
+    
     @Override
     public boolean salvar(Professor objProfessor){
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="INSERT INTO professor (nome, cpf, email,  idmateria"
                 + ") VALUES (?, ?, ?,  ?)";
         try{
@@ -31,7 +39,7 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
             pc.setString(3, objProfessor.getEmail());
             pc.setInt(4, objProfessor.getIdMateria());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -39,7 +47,7 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
         }
     }
     public ArrayList<Professor> listar(){
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="SELECT * FROM professor;";
         ArrayList<Professor> listProfessor = new ArrayList<>();
         try{
@@ -54,7 +62,7 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
                 Professor objProfessor = new Professor(nome, email, cpf, idMateria);
                 listProfessor.add(objProfessor);
             }
-            conexao.getConnection().close();
+            conexao.close();
             return listProfessor;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -63,13 +71,13 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
     }
     public boolean deletar(Professor obj_professor)
     {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="DELETE FROM professor WHERE cpf=?";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
             pc.setString(1, obj_professor.getCpf());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -92,7 +100,7 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
     }
     public boolean atualizar(Professor obj_professor)
     {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="UPDATE professor set nome = ?, email=?, idmateria=? WHERE cpf=?;";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
@@ -101,7 +109,7 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
             pc.setInt(3, obj_professor.getIdMateria());
             pc.setString(4, obj_professor.getCpf());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();

@@ -5,7 +5,8 @@
  */
 package banco.DAO;
 
-import banco.Conexao;
+
+import banco.Prototype.ConexaoPrototype;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,9 +20,17 @@ import objeto.Turma;
  */
 public class BdTurmaDAO implements InterfaceDAO<Turma>{
 
+    ConexaoPrototype conexao;
+    
+    public BdTurmaDAO()
+    {
+            conexao = new ConexaoPrototype();
+            conexao.setNomeBanco("gerenciador");
+    }
+    
     @Override
     public boolean salvar(Turma objeto) {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="INSERT INTO turma (id, nome, descricao, horario) VALUES (?, ?, ?, ?)";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
@@ -30,7 +39,7 @@ public class BdTurmaDAO implements InterfaceDAO<Turma>{
             pc.setString(3, objeto.getDescricao());
             pc.setString(4, objeto.getHorario_escolar().toString());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -40,13 +49,13 @@ public class BdTurmaDAO implements InterfaceDAO<Turma>{
 
     @Override
     public boolean deletar(Turma id) {
-         Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="DELETE FROM turma WHERE id=?";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
             pc.setInt(1, id.getId());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -56,7 +65,7 @@ public class BdTurmaDAO implements InterfaceDAO<Turma>{
 
     @Override
     public ArrayList<Turma> listar() {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="SELECT * FROM turma;";
         ArrayList<Turma> listMateria = new ArrayList<Turma>();
         try{
@@ -71,7 +80,7 @@ public class BdTurmaDAO implements InterfaceDAO<Turma>{
                 Turma objeto= new Turma (nome, id, Turma.PeriodoEscolar.valueOf(horario), descricao);
                 listMateria.add(objeto);
             }
-            conexao.getConnection().close();
+            conexao.close();
             return listMateria;
         }catch(SQLException ex) {
            ex.printStackTrace();

@@ -5,7 +5,8 @@
  */
 package banco.DAO;
 
-import banco.Conexao;
+
+import banco.Prototype.ConexaoPrototype;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,9 +19,17 @@ import objeto.Restricao;
  */
 public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
 
+    ConexaoPrototype conexao;
+    
+    public BdRestricaoDAO()
+    {
+            conexao = new ConexaoPrototype();
+            conexao.setNomeBanco("gerenciador");
+    }
+    
     @Override
     public boolean salvar(Restricao objeto) {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="INSERT INTO restricao (idmateria, cpf, horario, dia) VALUES (?, ?, ?, ?)";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
@@ -29,6 +38,7 @@ public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
             pc.setInt(3, objeto.getHorario());
             pc.setInt(4, objeto.getDia());
             pc.execute();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -38,12 +48,13 @@ public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
 
     @Override
     public boolean deletar(Restricao id) {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="DELETE FROM restricao WHERE idmateria=?";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
             pc.setInt(1, id.getIdMateria());
             pc.execute();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -53,7 +64,7 @@ public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
 
     @Override
     public ArrayList<Restricao> listar() {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="SELECT * FROM restricao;";
         ArrayList<Restricao> listMateria = new ArrayList<Restricao>();
         try{
@@ -77,7 +88,7 @@ public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
     }
     
     public ArrayList<Restricao> listar(int IdMateria) {
-        Conexao conexao = new Conexao();
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="SELECT * FROM restricao WHERE idmateria=?;";
         ArrayList<Restricao> listMateria = new ArrayList<Restricao>();
         try{
@@ -93,6 +104,7 @@ public class BdRestricaoDAO implements InterfaceDAO<Restricao>{
                 Restricao objeto= new Restricao (id, cpf, horario, dia);
                 listMateria.add(objeto);
             }
+            conexao.close();
             return listMateria;
         }catch(SQLException ex) {
            ex.printStackTrace();

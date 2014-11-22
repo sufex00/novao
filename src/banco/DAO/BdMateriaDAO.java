@@ -6,7 +6,6 @@
 package banco.DAO;
 
 
-import banco.Conexao;
 import banco.Prototype.ConexaoPrototype;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,9 +19,14 @@ import objeto.*;
  */
 public class BdMateriaDAO implements InterfaceDAO<Materia>{
         
+        ConexaoPrototype conexao;
+        public BdMateriaDAO()
+        {
+            conexao = new ConexaoPrototype();
+            conexao.setNomeBanco("gerenciador");
+        }
         public boolean salvar(Materia objMateria){
-        ConexaoPrototype conexao = new ConexaoPrototype();
-        conexao.setNomeBanco("gerenciador");
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="INSERT INTO materia (id, nome, descricao, cargahoraria, idturma"
                 + ") VALUES (?, ?, ?, ?, ?)";
         try{
@@ -33,7 +37,7 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
             pc.setInt(4, objMateria.getCargahoraria());
             pc.setInt(5, objMateria.getIdTurma());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }
         catch(SQLException ex){
@@ -43,8 +47,7 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
         
         }
         public ArrayList<Materia> listar(){
-        ConexaoPrototype conexao = new ConexaoPrototype();
-        conexao.setNomeBanco("gerenciador");
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="SELECT * FROM materia;";
         ArrayList<Materia> listMateria = new ArrayList<Materia>();
         try{
@@ -60,24 +63,35 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
                 Materia obj_materia = new Materia (id, nome, descricao, cargaHoraria, idTurma);
                 listMateria.add(obj_materia);
             }
-            conexao.getConnection().close();
+            conexao.close();
             return listMateria;
         }catch(SQLException ex) {
            ex.printStackTrace();
             return null;
         }
     }
+    public ArrayList<Materia> listar(int id){
+        ArrayList<Materia> lista = new ArrayList<Materia>();
+        ArrayList<Materia> banco = this.listar();
+        for (Materia objMateria : banco)
+        {
+            if(objMateria.getIdTurma() == id)
+            {
+                lista.add(objMateria);
+            }
+        }
+        return lista;
+    }
 
     @Override
     public boolean deletar(Materia obj_materia) {
-        ConexaoPrototype conexao = new ConexaoPrototype();
-        conexao.setNomeBanco("gerenciador");
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql="DELETE FROM materia WHERE id=?";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
             pc.setInt(1, obj_materia.getId());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
@@ -103,8 +117,7 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
     @Override
     public boolean atualizar(Materia objeto) {
         
-        ConexaoPrototype conexao = new ConexaoPrototype();
-        conexao.setNomeBanco("gerenciador");
+        ConexaoPrototype conexao = this.conexao.clone();
         String sql = "UPDATE materia set nome = ?, descricao=?, cargahoraria=? WHERE id=?;";
         try{
             PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
@@ -113,7 +126,7 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
             pc.setInt(3, objeto.getCargahoraria());
             pc.setInt(4, objeto.getId());
             pc.execute();
-            conexao.getConnection().close();
+            conexao.close();
             return true;
         }catch(SQLException ex) {
            ex.printStackTrace();
