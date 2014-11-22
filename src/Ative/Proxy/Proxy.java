@@ -11,7 +11,7 @@ package Ative.Proxy;
  *
  * @author matheus
  */
-public class Proxy {
+public class Proxy implements ProxyInterface{
 
     //private boolean ok;
     private String code = "";
