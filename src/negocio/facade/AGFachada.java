@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import objeto.HorarioEscolar;
+import objeto.Turma;
 import output.OutPDF;
 import output.adapter.Create;
 
@@ -38,7 +39,7 @@ public class AGFachada {
             //define o número de genes do indivíduo baseado na solução
             int numGenes = 5;
             //cria a primeira população aleatérioa
-            Populacao populacao = new Populacao(numGenes, tamPop);
+            Populacao populacao = new Populacao(numGenes, tamPop,(Turma) form.jComboxTurma.getSelectedItem());
             boolean temSolucao = false;
             int geracao = 0;
 

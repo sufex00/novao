@@ -5,6 +5,8 @@
  */
 package negocio.facade;
 
+import objeto.Turma;
+
 /**
  *
  * @author pedro_000
@@ -15,11 +17,11 @@ public class Populacao {
     private int tamPopulacao;
 
     //cria uma população com indivíduos aleatória
-    public Populacao(int numGenes, int tamPop) {
+    public Populacao(int numGenes, int tamPop, Turma objTurma) {
         tamPopulacao = tamPop;
         individuos = new Individuo[tamPop];
         for (int i = 0; i < individuos.length; i++) {
-            individuos[i] = new Individuo(numGenes);
+            individuos[i] = new Individuo(numGenes, objTurma);
         }
     }
 

@@ -15,7 +15,7 @@ public class SemSabadoBuilder extends OutPDFBuilder {
 
     @Override
     public void buildSize() {
-        out = new OutPDF(6);
+        out = new OutPDF(5);
     }
 
     @Override

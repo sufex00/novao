@@ -5,12 +5,17 @@
  */
 package gui;
 
+import banco.DAO.InterfaceDAO;
+import banco.FactoryMetody.FactoryBdTurma;
+import banco.FactoryMetody.FactoryMetody;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import negocio.facade.AGFachada;
 import objeto.HorarioEscolar;
+import objeto.Turma;
 import output.OutPDF;
 import output.adapter.Create;
 import output.builder.BuilderClass;
@@ -73,6 +78,11 @@ public class genericGui extends javax.swing.JInternalFrame {
         jLabel1.setText("Turma:");
 
         jComboxTurma.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboxTurma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboxTurmaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -181,11 +191,22 @@ public class genericGui extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jButtonConfirmActionPerformed
 
+    private void jComboxTurmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboxTurmaActionPerformed
+        // TODO add your handling code here:
+        FactoryMetody FactoryBd = new FactoryBdTurma();
+        InterfaceDAO InterfaceBd = FactoryBd.criar_DAO_BD();
+        ArrayList<Turma> lista = InterfaceBd.listar();
+        for(Turma objTurma : lista)
+        {
+            jComboxTurma.addItem(objTurma);
+        }
+    }//GEN-LAST:event_jComboxTurmaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonConfirm;
-    private javax.swing.JComboBox jComboxTurma;
+    public javax.swing.JComboBox jComboxTurma;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

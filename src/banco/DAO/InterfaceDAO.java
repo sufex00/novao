@@ -6,6 +6,7 @@
 package banco.DAO;
 
 import java.util.ArrayList;
+import objeto.Materia;
 
 /**
  *
@@ -18,4 +19,5 @@ public interface InterfaceDAO<T> {
     public ArrayList<T> listar();
     public T procurar(T id);
     public boolean atualizar (T objeto);
+
 }

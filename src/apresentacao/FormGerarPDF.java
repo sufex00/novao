@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import output.builder.BuilderClass;
 
 /**
  *
@@ -120,7 +121,9 @@ public class FormGerarPDF extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        OutPDF out = new OutPDF(7);
+        BuilderClass build = new BuilderClass();
+        build.buildSemSabado();
+        OutPDF out = build.get();
         if (jTextFieldFileName.getText().equals("")
                 && jTextFieldSchoolName.getText().equals("")
                 && jTextAreaDescricao.getText().equals("")) {

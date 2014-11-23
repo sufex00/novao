@@ -360,8 +360,15 @@ public class FormCadastroProfessor extends javax.swing.JInternalFrame {
             FactoryBd = new FactoryBdMateria();
             objBdProfessor=FactoryBd.criar_DAO_BD();
             Materia p = (Materia) objBdProfessor.procurar(new Materia(objProfessorSelecionado.getIdMateria()));
-            System.out.println(p.getNome());
-            jComboBoxMaterias.setSelectedItem(p);
+            for(int i = 0; i < jComboBoxMaterias.getItemCount(); i++)
+            {
+                Materia combo = (Materia) jComboBoxMaterias.getItemAt(i);
+                if(combo.getId()==p.getId())
+                {
+                    jComboBoxMaterias.setSelectedIndex(i);
+                    break;
+                }
+            }
         }
         else
         {

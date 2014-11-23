@@ -14,7 +14,7 @@ package negocio.facade;
 import java.util.ArrayList;
 import java.util.Random;
 import objeto.*;
-import banco.*;
+import banco.DAO.BdMateriaDAO;
 import banco.DAO.InterfaceDAO;
 import banco.FactoryMetody.FactoryBdMateria;
 import banco.FactoryMetody.FactoryBdProfessor;
@@ -27,12 +27,12 @@ public class Individuo {
     private int aptidao = 0;
     
     private FactoryMetody BdBanco = new FactoryBdMateria();
-    private InterfaceDAO objBdBanco = BdBanco.criar_DAO_BD();
+    private BdMateriaDAO objBdBanco = (BdMateriaDAO) BdBanco.criar_DAO_BD();
     //gera um indivíduo aleatório
-    public Individuo(int numGenes) {
+    public Individuo(int numGenes, Turma objTurma) {
         genes = new HorarioEscolar(numGenes);
         Random r = new Random();
-        ArrayList<Materia> materias = objBdBanco.listar();        
+        ArrayList<Materia> materias = objBdBanco.listar(objTurma.getId());        
         for(int dia=2 ; dia<7 ; dia++)
         {
            
