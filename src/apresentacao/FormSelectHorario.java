@@ -9,6 +9,7 @@ import banco.DAO.BdProfessorDAO;
 import banco.DAO.InterfaceDAO;
 import banco.FactoryMetody.FactoryBdMateria;
 import banco.FactoryMetody.FactoryBdProfessor;
+import banco.FactoryMetody.FactoryBdResticao;
 import banco.FactoryMetody.FactoryBdTurma;
 import banco.FactoryMetody.FactoryMetody;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import objeto.Materia;
 import objeto.Professor;
+import objeto.Restricao;
 import objeto.Turma;
 
 /**
@@ -31,6 +33,12 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
         initComponents();
         preencherForm(null);
         preencherTabela();
+        jComboDiaSemana.removeAllItems();
+        jComboDiaSemana.addItem(new String("SEGUNDA"));
+        jComboDiaSemana.addItem(new String("TERÇA"));
+        jComboDiaSemana.addItem(new String("QUARTA"));
+        jComboDiaSemana.addItem(new String("QUINTA"));
+        jComboDiaSemana.addItem(new String("SEXTA"));
     }
 
     /**
@@ -71,6 +79,7 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
         jTextFieldEmail = new javax.swing.JTextField();
         jTextCPF = new javax.swing.JTextField();
         jTextFieldNome = new javax.swing.JTextField();
+        jButtonSalvar = new javax.swing.JButton();
 
         jPanel3.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -242,7 +251,7 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Turma:");
 
-        jLabel6.setText("Descrição da turma:");
+        jLabel6.setText("Materia:");
 
         jTextFieldDescricao.setText("jTextField1");
 
@@ -253,6 +262,13 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
         jTextCPF.setText("jTextField4");
 
         jTextFieldNome.setText("jTextField5");
+
+        jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -279,14 +295,19 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldTurma, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jTextFieldNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                                .addComponent(jTextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING)))
+                                .addComponent(jTextFieldEmail, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTextFieldDescricao, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextFieldTurma, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(209, 209, 209)
+                .addComponent(jButtonSalvar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,11 +338,13 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(57, 57, 57)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37))))
+                        .addGap(3, 3, 3)))
+                .addComponent(jButtonSalvar)
+                .addContainerGap())
         );
 
         pack();
@@ -360,6 +383,64 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        // TODO add your handling code here:
+        FactoryMetody FactoryBD = new FactoryBdProfessor();
+        InterfaceDAO InterfaceDAO = FactoryBD.criar_DAO_BD();
+        String cpf = jTextCPF.getText();
+        Professor objProfessor =(Professor) InterfaceDAO.procurar(new Professor(cpf));
+        int idMateria = objProfessor.getIdMateria();
+        FactoryBD = new FactoryBdMateria();
+        InterfaceDAO=FactoryBD.criar_DAO_BD();
+        Materia objMateria = (Materia) InterfaceDAO.procurar(new Materia(idMateria));
+        int diaSemana=this.jComboDiaSemana.getSelectedIndex()+2;
+        Restricao objRestricao;
+        FactoryBD=new FactoryBdResticao();
+        InterfaceDAO=FactoryBD.criar_DAO_BD();
+        objRestricao = new Restricao(idMateria, cpf, 0, diaSemana);
+        if(jCheckBox1.isSelected())
+        {   
+            InterfaceDAO.salvar(objRestricao);
+            System.out.println(objRestricao.getCpf());
+        }if(!jCheckBox1.isSelected())
+        {
+            InterfaceDAO.deletar(objRestricao);
+        }
+        objRestricao = new Restricao(idMateria, cpf, 1, diaSemana);
+        if(jCheckBox2.isSelected())
+        {
+            InterfaceDAO.salvar(objRestricao);
+        }if(!jCheckBox2.isSelected())
+        {
+            InterfaceDAO.deletar(objRestricao);
+        }
+        objRestricao = new Restricao(idMateria, cpf, 2, diaSemana);
+        if(jCheckBox3.isSelected())
+        {
+            InterfaceDAO.salvar(objRestricao);
+        }if(!jCheckBox3.isSelected())
+        {
+            InterfaceDAO.deletar(objRestricao);
+        }
+        objRestricao = new Restricao(idMateria, cpf, 3, diaSemana);
+        if(jCheckBox4.isSelected())
+        {
+            InterfaceDAO.salvar(objRestricao);
+        }if(!jCheckBox4.isSelected())
+        {
+            InterfaceDAO.deletar(objRestricao);
+        }
+        objRestricao = new Restricao(idMateria, cpf, 4, diaSemana);
+        if(jCheckBox5.isSelected())
+        {
+            InterfaceDAO.salvar(objRestricao);
+        }if(!jCheckBox5.isSelected())
+        {
+            InterfaceDAO.deletar(objRestricao);
+        }
+        
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
+
     public void preencherForm(Professor objProfessor)
     {
         if(objProfessor == null)
@@ -375,12 +456,16 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
             
             FactoryMetody FactoryBd = new FactoryBdMateria();
             InterfaceDAO BdDAO = FactoryBd.criar_DAO_BD();
-            BdDAO.procurar(new Materia(objProfessor.getIdMateria()));
+            Materia objMateria = (Materia) BdDAO.procurar(new Materia(objProfessor.getIdMateria()));
             this.jTextFieldNome.setText(objProfessor.getNome());
             this.jTextCPF.setText(objProfessor.getCpf());
             this.jTextFieldEmail.setText(objProfessor.getEmail());
-            this.jTextFieldDescricao.setText("");
-            this.jTextFieldTurma.setText("");
+            this.jTextFieldDescricao.setText(objMateria.getNome());
+            FactoryBd = new FactoryBdTurma();
+            BdDAO = FactoryBd.criar_DAO_BD();
+            Turma objTurma = (Turma) BdDAO.procurar(new Turma(objMateria.getIdTurma()));
+            this.jTextFieldTurma.setText(objTurma.getNome());
+            jLabelTurno.setText(objTurma.getHorario_escolar().toString());
         }
     }
     
@@ -418,6 +503,7 @@ public class FormSelectHorario extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonBuscarCpf;
+    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;

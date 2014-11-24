@@ -104,7 +104,21 @@ public class BdTurmaDAO implements InterfaceDAO<Turma>{
 
     @Override
     public boolean atualizar(Turma objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ConexaoPrototype conexao = this.conexao.clone();
+        String sql="UPDATE turma set horario = ?, descricao=?, nome=? WHERE id=?;";
+        try{
+            PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
+            pc.setString(1, objeto.getHorario_escolar().toString());
+            pc.setString(2, objeto.getDescricao());     
+            pc.setString(3, objeto.getNome());
+            pc.setInt(4, objeto.getId());
+            pc.execute();
+            conexao.close();
+            return true;
+        }catch(SQLException ex) {
+           ex.printStackTrace();
+           return false;
+        }
     }
     
 }
