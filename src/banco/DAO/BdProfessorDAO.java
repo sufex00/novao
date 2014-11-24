@@ -85,6 +85,21 @@ public class BdProfessorDAO implements InterfaceDAO<Professor>{
         }
     }
     
+    public boolean deletar()
+    {
+        ConexaoPrototype conexao = this.conexao.clone();
+        String sql="DELETE FROM professor *";
+        try{
+            PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
+            pc.execute();
+            conexao.close();
+            return true;
+        }catch(SQLException ex) {
+           ex.printStackTrace();
+            return false;
+        }
+    }
+    
     @Override
     public Professor procurar(Professor cpf) {
         ArrayList<Professor> list = this.listar();

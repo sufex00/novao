@@ -10,6 +10,7 @@ import banco.DAO.BdMateriaDAO;
 import banco.DAO.InterfaceDAO;
 import banco.FactoryMetody.FactoryBdMateria;
 import banco.FactoryMetody.FactoryMetody;
+import banco.Memento.ListaMateriaMemento;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import objeto.Materia;
@@ -21,6 +22,7 @@ import objeto.Turma;
  */
 public class NegocioMateria {
     BdMateriaDAO objBdMateria = new BdMateriaDAO();
+    ListaMateriaMemento objMemento = new ListaMateriaMemento(objBdMateria.listar());
     public boolean VerificadorMateria(FormCadastroMateria form, Materia obj_Materia)
     {
         FactoryMetody BdMateria = new FactoryBdMateria();
@@ -49,6 +51,7 @@ public class NegocioMateria {
             negocioMateria.salvar(form_materia, obj_materia);
             JOptionPane.showMessageDialog(null, "Materia cadastrado com sucesso!!");
             form_materia.preencherTabela();
+            objMemento.inserir(objBdMateria.listar());
         }
         else
         {
@@ -88,7 +91,8 @@ public class NegocioMateria {
         boolean retorno = false;
         if(form_materia.jTextId.getText().isEmpty() || !form_materia.jTextId.isEditable())
         {
-            retorno = obj_Bdmateria.deletar(new Materia(Integer.parseInt(form_materia.jTextId.getText())));            
+            retorno = obj_Bdmateria.deletar(new Materia(Integer.parseInt(form_materia.jTextId.getText()))); 
+            objMemento.inserir(objBdMateria.listar());
         }
         return retorno;
     }
@@ -107,6 +111,7 @@ public class NegocioMateria {
          if(this.VerificadorMateria(form_Materia,materia))
         {
             retorno = bdMateria.atualizar(materia);
+            objMemento.inserir(objBdMateria.listar());
         }
         return retorno;
                
@@ -120,5 +125,9 @@ public class NegocioMateria {
         retorno = this.objBdMateria.salvar(objMateria);
     }
        return retorno;
+    }
+
+    public void desfazer() {
+        objMemento.desfazer();
     }
 }

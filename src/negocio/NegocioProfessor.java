@@ -14,7 +14,7 @@ import objeto.Professor;
 
 public class NegocioProfessor {
     BdProfessorDAO objBdProfessor = new BdProfessorDAO();
-    ListaProfessorMemento objMemento = new ListaProfessorMemento();
+    ListaProfessorMemento objMemento = new ListaProfessorMemento(objBdProfessor.listar());
 
     public boolean VerificadorProfessor(FormCadastroProfessor objForm ,Professor objProfessor){
         

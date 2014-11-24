@@ -133,4 +133,16 @@ public class BdMateriaDAO implements InterfaceDAO<Materia>{
            return false;
         }
     }
+
+    public void deletar() {
+        ConexaoPrototype conexao = this.conexao.clone();
+        String sql="DELETE FROM materia *";
+        try{
+            PreparedStatement pc=conexao.getConnection().prepareStatement(sql);
+            pc.execute();
+            conexao.close();
+        }catch(SQLException ex) {
+           ex.printStackTrace();
+        }
+    }
 }

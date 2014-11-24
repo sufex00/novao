@@ -13,10 +13,15 @@ import java.util.Stack;
  */
 abstract class Memento<T> 
 {
-    private Stack<T> pilha_memento = new Stack<T>();
+    private Stack<T> pilha_memento ;
+    public Memento(T obj){
+        pilha_memento=new Stack<T>();
+        pilha_memento.push(obj);
+    }
     public void inserir(T obj)
     {
         pilha_memento.push(obj);
+        System.out.println(pilha_memento.size());
     }
     public T retornar()
     {
@@ -24,7 +29,7 @@ abstract class Memento<T>
     }
     public T undo()
     {
-        if(pilha_memento.size()>0)
+        if(pilha_memento.size()>1)
             pilha_memento.pop();
         return pilha_memento.peek();
     }

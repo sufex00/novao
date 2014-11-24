@@ -5,6 +5,7 @@
  */
 package banco.Memento;
 
+import banco.DAO.BdProfessorDAO;
 import banco.DAO.InterfaceDAO;
 import banco.FactoryMetody.FactoryBdProfessor;
 import banco.FactoryMetody.FactoryMetody;
@@ -17,17 +18,18 @@ import objeto.Professor;
  */
 public class ListaProfessorMemento extends Memento<ArrayList<Professor>>{
     
-
+    public ListaProfessorMemento(ArrayList<Professor> lista)
+    {
+        super(lista);
+    }
     public Professor desfazer()
     {
         FactoryMetody FactoryBd = new FactoryBdProfessor();
-        InterfaceDAO InterfaceBd = FactoryBd.criar_DAO_BD();
+        BdProfessorDAO InterfaceBd = (BdProfessorDAO) FactoryBd.criar_DAO_BD();
         Professor obj_retorno=null;
         ArrayList<Professor> list = new ArrayList<>(super.retornar());
-        for(Professor obj_professor : list)
-        {
-            InterfaceBd.deletar(obj_professor);
-        }
+        InterfaceBd.deletar();
+        ArrayList<Professor> lista=super.undo();
         ArrayList<Professor> list_undo = new ArrayList<Professor>(super.undo());
         for(Professor obj_professor : list_undo)
         {
